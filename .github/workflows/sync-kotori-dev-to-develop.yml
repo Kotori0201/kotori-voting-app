@@ -5,6 +5,9 @@ on:
     branches:
       - kotori-dev
 
+permissions:
+  contents: write  # 👈 Quan trọng để có thể push bằng GITHUB_TOKEN
+
 jobs:
   sync-branches:
     runs-on: ubuntu-latest
@@ -13,7 +16,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Quan trọng để lấy đầy đủ lịch sử commit
+          fetch-depth: 0
 
       - name: Set up Git config
         run: |
