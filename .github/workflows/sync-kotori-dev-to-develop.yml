@@ -1,0 +1,35 @@
+name: Sync kotori-dev to develop
+
+on:
+  push:
+    branches:
+      - kotori-dev
+
+permissions:
+  contents: write  # 👈 Quan trọng để có thể push bằng GITHUB_TOKEN
+
+jobs:
+  sync-branches:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Git config
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Pull latest kotori-dev
+        run: git checkout kotori-dev
+
+      - name: Merge kotori-dev into develop
+        run: |
+          git checkout develop || git checkout -b develop
+          git merge kotori-dev --no-ff -m "Auto-merge kotori-dev into develop"
+
+      - name: Push changes to develop
+        run: git push origin develop
