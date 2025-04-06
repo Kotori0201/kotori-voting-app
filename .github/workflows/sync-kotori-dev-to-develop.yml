@@ -22,7 +22,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           base: develop
-          head: kotori-dev
+          branch: kotori-dev
           title: "Sync kotori-dev to develop"
           body: "Auto-generated PR to sync `kotori-dev` to `develop`."
           delete-branch: false
@@ -47,5 +47,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
           merge-method: squash
-
 
