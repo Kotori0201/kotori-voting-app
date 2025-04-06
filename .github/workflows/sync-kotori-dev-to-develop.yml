@@ -48,9 +48,4 @@ jobs:
           pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
           merge-method: squash
 
-      - name: Assign reviewer if conflict
-        if: fromJson(steps.pr.outputs.data).mergeable != true
-        uses: peter-evans/add-reviewers@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          reviewers: kotori-reviewer  # 👉 Thay bằng tên GitHub của reviewer
+
