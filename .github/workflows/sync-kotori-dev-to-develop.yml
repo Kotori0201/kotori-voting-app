@@ -1,4 +1,4 @@
-name: PR Sync kotori-dev to develop
+name: Sync kotori-dev to develop
 
 on:
   push:
@@ -6,45 +6,27 @@ on:
       - kotori-dev
 
 jobs:
-  create-pr-and-handle:
+  sync-branches:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Create Pull Request
-        id: cpr
-        uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          base: develop
-          branch: kotori-dev
-          title: "Sync kotori-dev to develop"
-          body: "Auto-generated PR to sync `kotori-dev` to `develop`."
-          delete-branch: false
+          fetch-depth: 0  # Quan trọng để lấy đầy đủ lịch sử commit
 
-      - name: Get PR info
-        id: pr
-        uses: octokit/request-action@v2.x
-        with:
-          route: GET /repos/${{ github.repository }}/pulls/${{ steps.cpr.outputs.pull-request-number }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Check if PR is mergeable
+      - name: Set up Git config
         run: |
-          echo "Mergeable: ${{ fromJson(steps.pr.outputs.data).mergeable }}"
-        shell: bash
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Auto-merge PR if mergeable
-        if: fromJson(steps.pr.outputs.data).mergeable == true
-        uses: peter-evans/enable-pull-request-automerge@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
-          merge-method: squash
+      - name: Pull latest kotori-dev
+        run: git checkout kotori-dev
 
+      - name: Merge kotori-dev into develop
+        run: |
+          git checkout develop || git checkout -b develop
+          git merge kotori-dev --no-ff -m "Auto-merge kotori-dev into develop"
+
+      - name: Push changes to develop
+        run: git push origin develop
