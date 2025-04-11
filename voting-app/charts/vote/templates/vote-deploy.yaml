@@ -1,6 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  labels:
+    app: vote
   name: vote
 spec:
   replicas: {{ .Values.replicaCount }}
@@ -13,10 +15,9 @@ spec:
         app: vote
     spec:
       containers:
-        - name: vote
-          image: {{ .Values.image }}
-          ports:
-            - containerPort: 80
-          env:
-            - name: REDIS_HOST
-              value: redis
+      - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}""
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        name: vote
+        ports:
+        - containerPort: 80
+          name: vote

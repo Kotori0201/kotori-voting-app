@@ -1,3 +1,8 @@
 replicaCount: 1
-image: my-vote-app
-servicePort: 80
+image:
+  repository: dockersamples/examplevotingapp_vote
+  tag: latest
+  pullPolicy: IfNotPresent
+service:
+  type: ClusterIP
+  port: 80
