@@ -1,0 +1,19 @@
+apiVersion: v2
+name: voting-app
+version: 0.1.0
+dependencies:
+  - name: vote
+    version: 0.1.0
+    repository: "file://charts/vote"
+  - name: result
+    version: 0.1.0
+    repository: "file://charts/result"
+  - name: worker
+    version: 0.1.0
+    repository: "file://charts/worker"
+  - name: redis
+    version: 0.1.0
+    repository: "file://charts/redis"
+  - name: postgres
+    version: 0.1.0
+    repository: "file://charts/postgres"
